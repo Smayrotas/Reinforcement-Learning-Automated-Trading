@@ -24,14 +24,10 @@ class agent(object):
         self.step=1
 
         self.epsilon=0.3
-        self.epsilon_decay=0.9
+        self.epsilon_decay=0.4
         self.epsilon_min=0.1
         self.alpha=0.2
-
-
         self.interest_rate=1 #Try to download that from a database
-
-
 
     def remember(self,state, action, reward, next_state, done):
         self.memory.append(state, action, reward, next_state, done)
@@ -41,15 +37,17 @@ class agent(object):
 
         if (np.random.rand()<=self.epsilon):
 
-            if (openPositions==1):
-                Col=[np.random.randint(1,3)]
+            if (openPositions>=1):
+                Col=[np.random.randint(1,3,size=1)]
+
             else:
-                Col = [np.random.randint(0,1)]
 
-                if Col==1:
-                    Col=2
+                Col = [np.random.randint(0,2,size=1)]
 
+                if (Col[0]==1):
+                    Col=[2]
         else:
+
             if (openPositions==1):
                 number= np.max(state[1:3])
                 Col = np.where(state == number)
@@ -59,7 +57,17 @@ class agent(object):
 
         self.currentState=state
         self.nextAction=Col
-        return (state,Col[0])
+
+        print (Col[0])
+        b=Col[0]
+        a=Col[0].__str__()[1:len(Col[0].__str__())-1]
+
+        action = Col[0]
+
+        if (len(a.__str__())>1):
+            action=list(Col[:])[0][1]
+
+        return (state,action)
 
     def replay(self,observation, reward, done, info):
 
@@ -73,11 +81,11 @@ class agent(object):
         + self.alpha*(reward+math.exp(-self.interest_rate*self.step)*np.max(self.currentState))
 
 
-
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
 
         self.step+=1
+
 
 
 
