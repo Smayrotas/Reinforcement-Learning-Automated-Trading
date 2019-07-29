@@ -92,6 +92,7 @@ class tradingEnvironment(gym.Env):
         observation=self.observeCurrentState()
         self.updateInfoTable(action)
         reward=self.updatePnl()
+        self.initValue+=reward
 
 
         self.x.append(self.currentStep)
@@ -163,8 +164,10 @@ class tradingEnvironment(gym.Env):
         PreviousBoughPrice=self.tradesInfo[a-1,2]
         CurrentSellPrice=self.tradesInfo[a,3]
 
+
         if  (PreviousBoughPrice is not 0) and (CurrentSellPrice is not 0) and (a is not 0):
             updatedPnl = Volume * (CurrentSellPrice- PreviousBoughPrice)
+
             return updatedPnl
 
         elif self.tradesInfo[a-1,3] is not 0:
@@ -179,6 +182,5 @@ class tradingEnvironment(gym.Env):
             return Q[:,self.openPositions], self.openPositions
         except:
             return 0
-
 
 
