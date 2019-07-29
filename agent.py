@@ -74,6 +74,8 @@ class agent(object):
         actions=observation[0]
         openPositions=observation[1]
 
+
+        '''Could potentially extrct differnt features from paper Financial trading as a game'''
         #The function that governs everything
         currentState=np.where(self.Q==self.currentState[0])[0][0]
 
@@ -85,7 +87,6 @@ class agent(object):
             self.epsilon *= self.epsilon_decay
 
         self.step+=1
-
 
 
 
